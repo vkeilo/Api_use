@@ -11,11 +11,14 @@ def get_text_diff(file1,file2):
     diff = list(d.compare(f1text.splitlines(), f2text.splitlines()))    
     return diff
 
-def get_text_add(diff_list):
+def get_text_add(file1,file2):
+    diff_list = get_text_diff(file1,file2)
     output = []
     for line in diff_list:
         if line.startswith('+ '):
             output.append(line[2:])
     return output
 
-print(get_text_add(get_text_diff('text1','text2')))
+
+
+# print(get_text_add(get_text_diff('text1','text2')))

@@ -25,6 +25,8 @@ class dir_scanner():
         self.logger = []
         self.process = None
         self.log_id = 0
+        self.needcheck_list = []
+        self.lock = threading.Lock()
 
     def run_log(self):
         fswatch_command = f'fswatch -n {self.scanpath}'
@@ -36,8 +38,10 @@ class dir_scanner():
                 split_line = line.split(' ')
                 append_datas = {'id':self.log_id, 'path':split_line[0], 'event':int(split_line[1]) }
                 self.log_id += 1
-                self.logger.append(append_datas)
-                self.start_check([4,1,4,4],self.logger.copy())
+                with self.lock:
+                    self.logger.append(append_datas)
+                    self.start_check([4,1,4,4],self.logger.copy())
+                    self.start_check([2],self.logger.copy())
         except KeyboardInterrupt:
             # 当用户按下Ctrl+C时，停止fswatch进程
             self.process.terminate()
@@ -55,12 +59,11 @@ class dir_scanner():
         for i in range(len(event_list)):
             if event_list[-i-1] != logger_list[-i-1]['event'] or now_file != logger_list[-i-1]['path']:
                 return
-        print(f'find it {now_file}')
-        return
-
-            
+        # print(f'find it {now_file}')
+        self.needcheck_list.append(now_file) 
 
     def start_log(self):
+        print('目录监测启动')
         log_thread = threading.Thread(target=self.run_log)
         log_thread.start()
 
@@ -68,6 +71,10 @@ class dir_scanner():
         check_thread = threading.Thread(target=self.event_list_check,args=(event_list,logger_list))
         check_thread.start()
 
-test_scanner = dir_scanner('.')
-test_scanner.start_log()
-print('started')
+    def need_check_remove(self,path):
+        with self.lock:
+            self.needcheck_list = [item for item in self.needcheck_list if item.get('path') != path]
+
+# test_scanner = dir_scanner('.')
+# test_scanner.start_log()
+# print('started')
