@@ -44,8 +44,10 @@ class dir_scanner():
                 self.log_id += 1
                 with self.lock:
                     self.logger.append(append_datas)
+                    # gedit 的更改
                     self.start_check([4,1,4,4],self.logger.copy())
-                    self.start_check([2,1,64,4],self.logger.copy())
+                    # self.start_check([2,1,64,4],self.logger.copy())
+                    # vim 的更改
                     self.start_check([2,1,4,64,4,64],self.logger.copy())
         except KeyboardInterrupt:
             # 当用户按下Ctrl+C时，停止fswatch进程
