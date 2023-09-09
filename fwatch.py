@@ -73,7 +73,7 @@ class dir_scanner():
 
     def need_check_remove(self,path):
         with self.lock:
-            self.needcheck_list = [item for item in self.needcheck_list if item.get('path') != path]
+            self.needcheck_list = [item for item in self.needcheck_list if item != path]
 
 # test_scanner = dir_scanner('.')
 # test_scanner.start_log()

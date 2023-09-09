@@ -1,6 +1,7 @@
 from fwatch import dir_scanner
 from dir_back import backup_folder
 from agent_use import  gpt_agent 
+from get_diff import get_text_add
 import time
 import os
 
@@ -10,6 +11,7 @@ backup_dir = 'tmp_dir'
 backup_folder(target_dir, backup_dir)
 
 gpt_assis = gpt_agent('chatglm2-6b')
+gpt_assis.init_messages_by_json('examiner.json')
 
 test_scanner = dir_scanner(target_dir)
 test_scanner.start_log()
@@ -25,13 +27,17 @@ def get_back_file(ori_file, target_dir, backup_dir):
     return backup_file_abs
 
 # print(get_back_file('/media/vkeilo/Titan/git_workspace/Api_use/gpt-api-use/API测试.ipynb', target_dir, backup_dir))
-def examine_file(check_file,back_file)
+def examine_file(check_file,back_file):
+    added_text_list = get_text_add(back_file,check_file)
+    gpt_assis.prompt_add("\n".join(added_text_list))
+    print(gpt_assis.prompt_post())
+    gpt_assis.init_role()
 
 while True:
     if len(test_scanner.needcheck_list) > 0:
         check_file = test_scanner.needcheck_list[0]
         test_scanner.need_check_remove(check_file)
-        back_file = get_back_file(check_file,back_dir)
+        back_file = get_back_file(check_file,target_dir,backup_dir)
         examine_file(check_file,back_file)
     else:
         time.sleep(0.3)
