@@ -1,6 +1,7 @@
 import subprocess
 import threading
-
+import shutil
+import os
 
 
 ############################
@@ -29,7 +30,10 @@ class dir_scanner():
         self.lock = threading.Lock()
 
     def run_log(self):
+        if shutil.which('fswatch') is None:
+            print(f"fswatch not found. Please install it.")
         fswatch_command = f'fswatch -n {self.scanpath}'
+        
         self.process = subprocess.Popen(fswatch_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         try:
             for line in self.process.stdout:
@@ -41,7 +45,8 @@ class dir_scanner():
                 with self.lock:
                     self.logger.append(append_datas)
                     self.start_check([4,1,4,4],self.logger.copy())
-                    self.start_check([2],self.logger.copy())
+                    self.start_check([2,1,64,4],self.logger.copy())
+                    self.start_check([2,1,4,64,4,64],self.logger.copy())
         except KeyboardInterrupt:
             # 当用户按下Ctrl+C时，停止fswatch进程
             self.process.terminate()
@@ -50,6 +55,9 @@ class dir_scanner():
             self.process.stderr.close()
     
     def event_list_check(self,event_list,logger_list):
+        # 后缀白名单
+        white_tail = ['.swp','.swpx']
+        
         # 如果记录长度不够或最后一位事件都没有对上就直接pass
         if len(logger_list) < len(event_list):
             return 
@@ -57,9 +65,12 @@ class dir_scanner():
             return
         now_file = logger_list[-1]['path']
         for i in range(len(event_list)):
+            _, file_extension = os.path.splitext(logger_list[-i-1]['path'])
+            if file_extension in white_tail:
+                return
             if event_list[-i-1] != logger_list[-i-1]['event'] or now_file != logger_list[-i-1]['path']:
                 return
-        # print(f'find it {now_file}')
+        print(f'find it {now_file}')
         self.needcheck_list.append(now_file) 
 
     def start_log(self):
@@ -75,6 +86,6 @@ class dir_scanner():
         with self.lock:
             self.needcheck_list = [item for item in self.needcheck_list if item != path]
 
-# test_scanner = dir_scanner('.')
-# test_scanner.start_log()
-# print('started')
+test_scanner = dir_scanner('.')
+test_scanner.start_log()
+print('started')
