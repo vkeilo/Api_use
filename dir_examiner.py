@@ -16,6 +16,7 @@ gpt_assis.init_messages_by_json('examiner.json')
 
 test_scanner = dir_scanner(target_dir)
 test_scanner.start_log()
+gpt_assis.start_interact()
 
 
 def get_back_file(ori_file, target_dir, backup_dir):
@@ -36,7 +37,7 @@ def examine_file(check_file,back_file):
     print(added_text_list)
     gpt_assis.prompt_add("\n".join(added_text_list))
     print(gpt_assis.prompt_post())
-    gpt_assis.init_role()
+    # gpt_assis.init_role()
 
 while True:
     if len(test_scanner.needcheck_list) > 0:

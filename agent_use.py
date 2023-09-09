@@ -1,3 +1,4 @@
+import threading
 import openai
 import json
 
@@ -22,6 +23,20 @@ class gpt_agent():
         self.messages = data["dialogues"]
         self.origin_memery = self.messages.copy()
 
+    # 新增的方法，用于等待用户输入并与 GPT 进行交互
+    def interact_with_agent(self):
+        while True:
+            user_input = input("You: ")  # 等待用户输入
+            if user_input.lower() == "exit":
+                break  # 如果用户输入 "exit"，则退出交互
+            self.prompt_add(user_input)  # 将用户输入添加到对话历史
+            response = self.prompt_post()  # 获取 GPT 的回复
+            print("assistant:", response)  # 打印 GPT 的回复
+
+    def start_interact(self):
+        check_thread = threading.Thread(target=self.interact_with_agent)
+        check_thread.start()
+            
     # 在对话历史中额外增加一句
     def history_add_one(self,role,text):
         self.messages.append({"role":role, "content": text})   
