@@ -13,7 +13,7 @@ class gpt_agent():
     # 角色回滚
     def init_role(self):
         self.messages = self.origin_memery.copy()
-        print(self.messages)
+        # print(self.messages)
 
     # 根据目标json对话中的内容进行角色扮演
     def init_messages_by_json(self,json_path):
