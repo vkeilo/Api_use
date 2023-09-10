@@ -22,7 +22,7 @@ class gpt_agent():
             data = json.load(json_file)
         self.messages = data["dialogues"]
         self.origin_memery = self.messages.copy()
-
+        
     # 新增的方法，用于等待用户输入并与 GPT 进行交互
     def interact_with_agent(self):
         while True:
