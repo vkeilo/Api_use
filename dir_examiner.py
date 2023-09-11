@@ -13,7 +13,6 @@ backup_folder(target_dir, backup_dir)
 
 gpt_assis = gpt_agent('chatglm2-6b')
 gpt_assis.init_messages_by_json('examiner.json')
-
 test_scanner = dir_scanner(target_dir)
 test_scanner.start_log()
 gpt_assis.start_interact()
