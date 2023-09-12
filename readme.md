@@ -14,10 +14,9 @@
 
 - `agent_use.py` 包含了一个名为 `gpt_agent` 的 Python 类，用于与 用户定义的大模型（现支持chatglm2-6b/OpenAI GPT-3）进行交互。交互接口采用openai规范，该类提供了以下功能：
 
-    - 初始化 GPT-3 模型
+    - 根据 JSON 对话内容进行角色扮演初始化
     - 角色回滚（删除对话记录）
-    - 根据 JSON 对话内容进行角色扮演
-    - 新增消息
+    - 新增历史消息
     - 获取回答
     - 与用户进行实时交互（用以模型行为纠正）
 
@@ -57,10 +56,10 @@
 
 ## 使用方法
 
-以下是项目中各模块的具体使用方法：
+以下是项目具体运行方法：
 
 ### 环境准备
-- 开发使用系统为 `ubuntu22.04LTS` ，python版本为3.9.5,请根据`requirements.txt`中内容在安装好需要的库文件（推荐使用虚拟环境）
+- 开发使用系统为 `ubuntu 22.04LTS` ，python版本为3.9.5,请根据`requirements.txt`中内容在安装好需要的依赖库（推荐使用虚拟环境）
     ```sh
     pip install -r requirements.txt
     ```
@@ -68,15 +67,15 @@
     ```sh
     sudo apt-get install fswatch
     ```
+- 确保[chatglm2-6b](https://github.com/THUDM/ChatGLM2-6B)大模型API接口已经运行
+    ```sh
+    python openai_api.py
+    ```
 
-### 目录监测和备份
-
-- 使用 `dir_examiner.py` 脚本来监测目录中文件的变化，并可选择备份目录。在脚本中，可以设置目标目录和备份目录的路径。通过 `dir_scanner` 和 `backup_folder` 进行目录监测和备份。
-
-### 文本差异获取
-
-- 使用 `get_diff.py` 脚本来比较两个文本文件之间的差异。您可以调用以下函数：
-
-    - `get_text_diff(file1, file2)`: 比较两个文本文件的差异，`file1` 和 `file2` 是要比较的文件的路径。函数将返回差异信息的列表。
-
-    - `get_text_add(ori_file, modified_file)`: 提取添加的文本行，
+### 运行
+- 文件路径指定：
+    - 更改 `dir_examiner.py` 中的 `target_dir` 和 `backup_dir` 参数，分别对应待监视目录和备份目录的绝对路径（备份目录会自主创建，但不要设置在监视目录路径下） 
+- 主程序启动(确保使用的是正确的python环境)
+    -   ```sh
+        python dir_examiner.py
+        ```
