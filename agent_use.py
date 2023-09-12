@@ -3,13 +3,14 @@ import openai
 import json
 
 class gpt_agent():
+    
     def __init__(self,model_name,key="none"):
+        self.api_dic = {'chatglm2-6b':"http://localhost:8000/v1",}
         self.model = model_name
         self.messages = []
         self.origin_memery = []
         openai.api_key = key
-        if model_name == "chatglm2-6b":
-            openai.api_base = "http://localhost:8000/v1"
+        openai.api_base = self.api_dic[self.model]
     
     # 角色回滚
     def init_role(self):
@@ -53,7 +54,7 @@ class gpt_agent():
         self.history_add_one("user",text)
 
     # 获取回答，并更新对话历史    
-    def prompt_post(self,T = 0,maxtokens = 200):
+    def prompt_post(self,T = 0.01,maxtokens = 200):
         # 调用API进行对话生成
         response = openai.ChatCompletion.create(
             model=self.model,

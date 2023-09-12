@@ -32,13 +32,15 @@ class dir_scanner():
     def run_log(self):
         if shutil.which('fswatch') is None:
             print(f"fswatch not found. Please install it.")
-        fswatch_command = f'fswatch -n {self.scanpath}'
+        fswatch_command = f'fswatch -n {self.scanpath}/*'
         
         self.process = subprocess.Popen(fswatch_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         try:
             for line in self.process.stdout:
                 # 检查fswatch输出中的每一行
                 line = line.strip()
+                if not line.startswith('/'):
+                    continue
                 split_line = line.split(' ')
                 append_datas = {'id':self.log_id, 'path':split_line[0], 'event':int(split_line[1]) }
                 self.log_id += 1
