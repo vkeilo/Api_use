@@ -7,7 +7,7 @@ import time
 import os
 
 
-target_dir = '.'
+target_dir = 'test'
 backup_dir = 'tmp_dir'
 backup_folder(target_dir, backup_dir)
 
