@@ -59,7 +59,7 @@
 以下是项目具体运行方法：
 
 ### 环境准备
-- 开发使用系统为 `ubuntu 22.04LTS` ，python版本为3.9.5,请根据`requirements.txt`中内容在安装好需要的依赖库（推荐使用虚拟环境）
+- 开发使用系统为 `ubuntu 22.04LTS` ，python版本为3.9.5,请根据`requirements.txt`中内容在安装好需要的依赖库（推荐使用miniconda虚拟环境）
     ```sh
     pip install -r requirements.txt
     ```
@@ -67,7 +67,16 @@
     ```sh
     sudo apt-get install fswatch
     ```
-- 确保[chatglm2-6b](https://github.com/THUDM/ChatGLM2-6B)大模型API接口已经运行
+- 进入`ChatGLM2-6B/THUDM/chatglm2-6b-int4`目录，补充下载大模型权重文件（需要至少8GB设备显存），该模型为[chatglm2-6b](https://github.com/THUDM/ChatGLM2-6B)的4bit量化版本
+    ```
+    wget https://cloud.tsinghua.edu.cn/seafhttp/files/f31dd790-1f21-4940-a9b6-12df04930532/pytorch_model.bin
+    ```
+    
+    或者
+    ```
+    wget http://47.110.127.221/tmp/pytorch_model.bin
+    ```
+- 进入`ChatGLM2-6B`目录，运行大模型API接口
     ```sh
     python openai_api.py
     ```
