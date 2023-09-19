@@ -74,7 +74,7 @@ class dir_scanner():
                 return
             if event_list[-i-1] != logger_list[-i-1]['event'] or now_file != logger_list[-i-1]['path']:
                 return
-        print(f'find it {now_file}')
+        # print(f'find it {now_file}')
         self.needcheck_list.append(now_file) 
 
     def start_log(self):
@@ -90,6 +90,6 @@ class dir_scanner():
         with self.lock:
             self.needcheck_list = [item for item in self.needcheck_list if item != path]
 
-test_scanner = dir_scanner('.')
-test_scanner.start_log()
-print('started')
+# test_scanner = dir_scanner('.')
+# test_scanner.start_log()
+# print('started')

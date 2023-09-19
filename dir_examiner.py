@@ -7,15 +7,7 @@ import time
 import os
 
 
-target_dir = 'test'
-backup_dir = 'tmp_dir'
-backup_folder(target_dir, backup_dir)
 
-gpt_assis = gpt_agent('chatglm2-6b')
-gpt_assis.init_messages_by_json('examiner.json')
-test_scanner = dir_scanner(target_dir)
-test_scanner.start_log()
-gpt_assis.start_interact()
 
 
 def get_back_file(ori_file, target_dir, backup_dir):
@@ -34,15 +26,42 @@ def examine_file(check_file,back_file):
     if(len(added_text_list) == 0):
         return
     print(added_text_list)
-    gpt_assis.prompt_add("\n".join(added_text_list))
-    print(gpt_assis.prompt_post())
+    gpt_assis.prompt_add("新增的内容：\n"+str(added_text_list))
+    print(gpt_assis.prompt_post(T=0.6,remember_flag=True))
     # gpt_assis.init_role()
 
-while True:
-    if len(test_scanner.needcheck_list) > 0:
-        check_file = test_scanner.needcheck_list[0]
-        test_scanner.need_check_remove(check_file)
-        back_file = get_back_file(check_file,target_dir,backup_dir)
-        examine_file(check_file,back_file)
-    else:
-        time.sleep(0.3)
+
+
+
+
+
+
+
+
+
+
+if __name__ == "__main__":
+    target_dir = 'test'
+    backup_dir = 'tmpdir'
+    backup_folder(target_dir, backup_dir)
+
+    gpt_assis = gpt_agent('chatglm2-6b')
+    gpt_assis.init_messages_by_json('examiner.json')
+    test_scanner = dir_scanner(target_dir)
+    test_scanner.start_log()
+    gpt_assis.start_interact()
+
+
+
+    while True:
+        if len(test_scanner.needcheck_list) > 0:
+            check_file = test_scanner.needcheck_list[0]
+            print(f'检测含新内容的文件\t{check_file}')
+            test_scanner.need_check_remove(check_file)
+            back_file = get_back_file(check_file,target_dir,backup_dir)
+            examine_file(check_file,back_file)
+        else:
+            time.sleep(0.3)
+
+
+
